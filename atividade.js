@@ -5,6 +5,7 @@ const port = 3000
 const PDFDocument = require('pdfkit');
 
 //CONEXÃO COM BANCO DE DADOS
+/*
 const Sequelize = require('sequelize')
 const sequelize = new Sequelize('atividade', 'root', '159357', {
     host: "localhost",
@@ -17,7 +18,7 @@ sequelize.authenticate().then(function(){
 }).catch(function(erro){
     console.log("Falha ao conectar: "+erro)
 })
-
+*/
 
 app.get('/', function(req, res){
     res.send('Show de bola!!!')
@@ -25,28 +26,40 @@ app.get('/', function(req, res){
 
 //ROTA PARA RETORNAR PDF
 
-app.post('/relatorio/cidade', function(req, res, next){
+app.get('/relatorio/cidade/:cidade', function(req, res, next){
     const doc = new PDFDocument({});
     const name = "Teste"
     const content = "Teste de PDF"
+    const placa = "HQP8975"
+    const cidade = req.params.cidade
+    const cidadeBD = "Crato"
+    const data = "26/09/2023"
+    const hora = "08:00"
     
-    res.setHeader("Content-disposition", 'attachment; filename="' + name +".pdf" + '"')
+    if(cidade == cidadeBD){
+        res.setHeader("Content-disposition", 'attachment; filename="' + name +".pdf" + '"')
+        res.setHeader("Content-type", "application/pdf")
 
-    res.setHeader("Content-type", "application/pdf")
-
-    doc.pipe(res)
-    doc.end()
+        doc.text("Placa: " + placa + " Cidade: " + cidadeBD + ", Data cadastro: " + data + ", Hora Cadastro: " + hora + "\n")
+        doc.text("Placa: " + placa + " Cidade: " + cidadeBD + ", Data cadastro: " + data + ", Hora Cadastro: " + hora + "\n")
+        doc.pipe(res)
+        doc.end()
+    }else{
+        res.send("Cidade não consta no banco de dados");
+    }
+    
 })
 
 
 //ROTA PARA CONFERIR A PLACA
 app.get('/consulta/:placa', function(req, res){
     const placa = req.params.placa
-
+    const placaBD = "HWR7845"
+    
     if(placa == placaBD){
-        return "Placa no banco" + placa;
+        res.send("Placa no banco: " + placa);
     }else{
-        return "Placa não encontrada";
+        res.send("Placa não encontrada");
     }
 })
 
