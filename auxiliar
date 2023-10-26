@@ -1,0 +1,7 @@
+A.    
+Ter uma rota POST para '/cadastroPlaca’, onde pode
+ser enviado uma foto apenas no formato PNG 
+e o nome de uma cidade. Uma API de OCR (reconhecimento de caracteres) 
+deve ser usada para reconhecer a placa. Além da foto, o usuário envia 
+o nome da cidade, e o sistema vai armazenar o número da placa, cidade, 
+data e hora(gerado automaticamente) em um banco de dados MongoDB.
