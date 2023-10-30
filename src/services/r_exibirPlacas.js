@@ -42,8 +42,8 @@ async function pesquisaPlacaPorNumero(placaDesejada) {
     client.close();
 }
 
-const cidadeDesejada = { cidade: "Crato" };
-//const placaDesejada = { placa: "RDF5896" }; // Filtre os documentos que deseja consultar
+//const cidadeDesejada = { cidade: "Crato" };
+const placaDesejada = { placa: "PQP4213" }; // Filtre os documentos que deseja consultar
 
-pesquisaPlacaPorCidade(cidadeDesejada).catch(console.error);
-//pesquisaPlacaPorNumero(placaDesejada).catch(console.error);
+//pesquisaPlacaPorCidade(cidadeDesejada).catch(console.error);
+pesquisaPlacaPorNumero(placaDesejada).catch(console.error);

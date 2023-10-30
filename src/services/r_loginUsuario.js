@@ -18,17 +18,17 @@ async function pesquisaPlacaPorCidade(usuarioCredencialEmail, usuarioCredencialS
                 if (resultado) {
                     console.log("Email e Senha CORRETOS")
                 } else {
-                    console.log("Senha INCORRETA")
+                    console.log("Email e/ou Senha INCORRETOS")
                 }
             }
             else{
-                console.log("Email INEXISTENTE na base de dados");
+                console.log("Email e/ou Senha INCORRETOS");
             }
         });
         
     } else {
         // Resultado está vazio
-        console.log('Email INEXISTENTE na base de dados');
+        console.log('Email e/ou Senha INCORRETOS');
     }
     
     // Fecha a conexão com o banco de dados

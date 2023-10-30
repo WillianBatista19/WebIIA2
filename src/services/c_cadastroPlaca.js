@@ -26,4 +26,4 @@ function obterDataEHoraFormatada() {
     return `${data} - ${hora}:${milissegundo}`;
 }
 
-cadastrarPlaca("RDF5896 - aikjhfduh", "Crato").catch(console.error);
+cadastrarPlaca("PQP4213 - aikjhfduh", "Jua").catch(console.error);

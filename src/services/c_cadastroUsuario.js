@@ -31,4 +31,4 @@ function verificarEmailSemEspacos(login) {
     //console.log(regex.test(login));
 }
 
-cadastrarPlaca("jonaswaters@blalabla.tal", "adjhfj743238jhgh37134").catch(console.error);
+cadastrarPlaca("miguel@blalabl.atal", "adjhfj743238jhgh37134").catch(console.error);
