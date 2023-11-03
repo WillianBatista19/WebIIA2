@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './CadastroPlacas.css';
-import { cadastrarPlacaMDB } from '../services/c_cadastroPlaca';
-// const obterDataEHoraFormatada = require('../services/c_cadastroPlaca');
-//const cadastrarPlacaMDB = require('./c_cadastroPlaca');
+const conecteAoBancoDeDados = require('./conectaBanco');
 
 function CadastroPlacas() {
   const [nomeCidade, setNomeCidade] = useState('');
@@ -64,14 +62,33 @@ function CadastroPlacas() {
   };
   */
     
-const cadastrarPlaca = async () => {
-  try {
-    const resultado = await cadastrarPlacaMDB(numeroPlaca, nomeCidade);
-    console.log("Resultado: ", resultado);
-  } catch (error) {
-    console.error('Erro ao cadastrar a placa:', error);
-  }
-};
+  async function cadastrarPlacaMDB(numeracao, localidade) {
+    if (numeracao.length > 7) {
+        numeracao = numeracao.slice(numeracao.length - 7);
+    }
+
+    const collection = await conecteAoBancoDeDados("placaVeiculo");
+
+    const json = { placa: numeracao, cidade: localidade , cadastroMomento: obterDataEHoraFormatada()};
+
+    const result = await collection.insertOne(json);
+    console.log(`Uma nova placa inserida com o ID: ${result.insertedId}`);
+
+    // Fecha a conexão com o banco de dados
+    const client = collection.s.db.client;
+    client.close(); 
+
+    return result.insertedId;
+}
+
+function obterDataEHoraFormatada() {
+    const agora = new Date();
+    const data = agora.toLocaleDateString('pt-BR');
+    const hora = agora.toTimeString().split(' ')[0];
+    const milissegundo = agora.getMilliseconds().toString().padStart(3, '0');
+
+    return `${data} - ${hora}:${milissegundo}`;
+}
 
   return (
     <div className="cadastro-container">
@@ -89,7 +106,7 @@ const cadastrarPlaca = async () => {
           <p>Nome da Cidade: {nomeCidade}</p>
           <p>Número da Placa: {numeroPlaca}</p>
           <p>Hora do Cadastro: {horaCadastro}</p>
-          <button onClick={cadastrarPlaca} className="button cadastrar-placa">Cadastrar Placa</button>
+          <button onClick={cadastrarPlacaMDB(nomeCidade, numeroPlaca)} className="button cadastrar-placa">Cadastrar Placa</button>
         </div>
       )}
     </div>

@@ -1,4 +1,4 @@
-// webpack.config.js
+const path = require('path'); // Importe o módulo 'path'
 
 module.exports = (webpackEnv) => {
     return {
@@ -20,16 +20,16 @@ module.exports = (webpackEnv) => {
         },
         // Outras configurações
         resolve: {
-            extensions: ['.js', '.jsx'],
-            alias: {
-                '@services': path.resolve(__dirname, 'src/services'),
-            },
             fallback: {
                 "zlib": require.resolve("browserify-zlib"),
+                "buffer": require.resolve("buffer/"),
+                "crypto": require.resolve("crypto-browserify"),
+                "http": require.resolve("stream-http"),
+                "timers": require.resolve("timers-browserify"),
                 "util": require.resolve("util"),
                 "stream": require.resolve("stream-browserify"),
                 "fs": false,
-                "os": false,
+                "os": require.resolve("os-browserify/browser"),
                 "path": false,
             },
         },

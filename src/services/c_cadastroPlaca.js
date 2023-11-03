@@ -1,4 +1,4 @@
-const conecteAoBancoDeDados = require('./conectaBanco');
+const conecteAoBancoDeDados = require('../components/conectaBanco');
 
 /*async function cadastrarPlacaMDB(numeracao, localidade) {
     if (numeracao.length > 7) {
@@ -47,7 +47,7 @@ function obterDataEHoraFormatada() {
     return `${data} - ${hora}:${milissegundo}`;
 }
 
-module.exports = cadastrarPlacaMDB;
+// module.exports = cadastrarPlacaMDB;
 
 // module.exports = obterDataEHoraFormatada;
 
@@ -55,4 +55,4 @@ module.exports = cadastrarPlacaMDB;
 
 // export { obterDataEHoraFormatada }
 
-// cadastrarPlacaMDB("dasda aikjhfduh - OOO4213", "Jua").catch(console.error);
+cadastrarPlacaMDB("dasda aikjhfduh - OOO4213", "Jua").catch(console.error);
