@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './CadastroPlacas.css';
+import { cadastrarPlacaMDB } from '../services/c_cadastroPlaca';
+// const obterDataEHoraFormatada = require('../services/c_cadastroPlaca');
+//const cadastrarPlacaMDB = require('./c_cadastroPlaca');
 
 function CadastroPlacas() {
   const [nomeCidade, setNomeCidade] = useState('');
@@ -46,16 +49,29 @@ function CadastroPlacas() {
     }
   };
 
+  /*
   const cadastrarPlaca = async () => {
+    console.log("Teste")
 
-    const confirmacao = window.confirm('Placa cadastrada com sucesso! Deseja cadastrar outra placa?');
+    //const confirmacao = window.confirm('Placa cadastrada com sucesso! Deseja cadastrar outra placa?');
 
-    if (confirmacao) {
-      setNomeCidade('');
-      setNumeroPlaca('');
+    //if (confirmacao) {
+    //  setNomeCidade('');
+    //  setNumeroPlaca('');
       setHoraCadastro('');
-    }
+    //}
+    
   };
+  */
+    
+const cadastrarPlaca = async () => {
+  try {
+    const resultado = await cadastrarPlacaMDB(numeroPlaca, nomeCidade);
+    console.log("Resultado: ", resultado);
+  } catch (error) {
+    console.error('Erro ao cadastrar a placa:', error);
+  }
+};
 
   return (
     <div className="cadastro-container">

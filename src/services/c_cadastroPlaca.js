@@ -1,8 +1,8 @@
 const conecteAoBancoDeDados = require('./conectaBanco');
 
-async function cadastrarPlaca(numeracao, localidade) {
+/*async function cadastrarPlacaMDB(numeracao, localidade) {
     if (numeracao.length > 7) {
-        numeracao = numeracao.substring(0, 7);
+        numeracao = numeracao.slice(numeracao.length - 7);
     }
 
     const collection = await conecteAoBancoDeDados("placaVeiculo");
@@ -15,6 +15,27 @@ async function cadastrarPlaca(numeracao, localidade) {
     // Fecha a conexão com o banco de dados
     const client = collection.s.db.client;
     client.close(); 
+
+    return true;
+}*/
+
+async function cadastrarPlacaMDB(numeracao, localidade) {
+    if (numeracao.length > 7) {
+        numeracao = numeracao.slice(numeracao.length - 7);
+    }
+
+    const collection = await conecteAoBancoDeDados("placaVeiculo");
+
+    const json = { placa: numeracao, cidade: localidade , cadastroMomento: obterDataEHoraFormatada()};
+
+    const result = await collection.insertOne(json);
+    console.log(`Uma nova placa inserida com o ID: ${result.insertedId}`);
+
+    // Fecha a conexão com o banco de dados
+    const client = collection.s.db.client;
+    client.close(); 
+
+    return result.insertedId;
 }
 
 function obterDataEHoraFormatada() {
@@ -26,4 +47,12 @@ function obterDataEHoraFormatada() {
     return `${data} - ${hora}:${milissegundo}`;
 }
 
-cadastrarPlaca("PQP4213 - aikjhfduh", "Jua").catch(console.error);
+module.exports = cadastrarPlacaMDB;
+
+// module.exports = obterDataEHoraFormatada;
+
+// export { cadastrarPlacaMDB }
+
+// export { obterDataEHoraFormatada }
+
+// cadastrarPlacaMDB("dasda aikjhfduh - OOO4213", "Jua").catch(console.error);
