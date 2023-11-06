@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './CadastroPlacas.css';
-const conecteAoBancoDeDados = require('./conectaBanco');
+//import { cadastrarPlacaMDB } from './cadastroDePlaca';
+import { Stitch, RemoteMongoClient, AnonymousCredential } from 'mongodb-stitch-react-native-sdk';
+
+const APP_ID = '16baa416-617f-406f-9143-6b2070a25b53'; // Substitua pelo ID da sua aplicação
+
+// Configuração da aplicação Stitch
+const client = Stitch.initializeDefaultAppClient(APP_ID);
 
 function CadastroPlacas() {
   const [nomeCidade, setNomeCidade] = useState('');
@@ -61,26 +67,48 @@ function CadastroPlacas() {
     
   };
   */
-    
-  async function cadastrarPlacaMDB(numeracao, localidade) {
-    if (numeracao.length > 7) {
-        numeracao = numeracao.slice(numeracao.length - 7);
+  
+  async function connectToMongoDB() {
+    try {
+        await client.auth.loginWithCredential(new AnonymousCredential());
+        console.log(`Logged in as user: ${client.auth.user.id}`);
+        const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas');
+        const db = mongoClient.db('Cluster0'); // Substitua pelo nome do seu banco de dados
+        return db;
+    } catch (error) {
+        console.error('Erro ao conectar ao banco de dados:', error);
+        throw error;
     }
-
-    const collection = await conecteAoBancoDeDados("placaVeiculo");
-
-    const json = { placa: numeracao, cidade: localidade , cadastroMomento: obterDataEHoraFormatada()};
-
-    const result = await collection.insertOne(json);
-    console.log(`Uma nova placa inserida com o ID: ${result.insertedId}`);
-
-    // Fecha a conexão com o banco de dados
-    const client = collection.s.db.client;
-    client.close(); 
-
-    return result.insertedId;
 }
 
+async function cadastrarPlacaMDB(numeracao, localidade) {
+  const db = await connectToMongoDB(); // Conecte ao banco de dados
+
+  try {
+  // Observe que a função `connectToMongoDB` já cuida da autenticação e conexão
+
+  // Verifique o tamanho da numeracao e ajuste conforme necessário
+  if (numeracao.length > 7) {
+      numeracao = numeracao.slice(numeracao.length - 7);
+  }
+
+  // Crie o objeto JSON a ser inserido
+  const json = {
+      placa: numeracao,
+      cidade: localidade,
+      cadastroMomento: new Date(), // Substitua pela função que obtém data e hora formatada
+  };
+
+  // Insira o documento na coleção
+  const result = await db.collection('placaVeiculo').insertOne(json);
+  console.log(`Uma nova placa inserida com o ID: ${result.insertedId}`);
+
+  } catch (error) {
+  console.error('Erro ao cadastrar a placa:', error);
+  }
+}
+
+/*
 function obterDataEHoraFormatada() {
     const agora = new Date();
     const data = agora.toLocaleDateString('pt-BR');
@@ -89,6 +117,7 @@ function obterDataEHoraFormatada() {
 
     return `${data} - ${hora}:${milissegundo}`;
 }
+*/
 
   return (
     <div className="cadastro-container">
@@ -106,7 +135,7 @@ function obterDataEHoraFormatada() {
           <p>Nome da Cidade: {nomeCidade}</p>
           <p>Número da Placa: {numeroPlaca}</p>
           <p>Hora do Cadastro: {horaCadastro}</p>
-          <button onClick={cadastrarPlacaMDB(nomeCidade, numeroPlaca)} className="button cadastrar-placa">Cadastrar Placa</button>
+          <button onClick={cadastrarPlacaMDB(numeroPlaca, nomeCidade)} className="button cadastrar-placa">Cadastrar Placa</button>
         </div>
       )}
     </div>
