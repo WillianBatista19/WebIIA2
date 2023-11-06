@@ -35,7 +35,7 @@ async function cadastrarPlacaMDB(numeracao, localidade) {
     const client = collection.s.db.client;
     client.close(); 
 
-    return result.insertedId;
+    //return result.insertedId;
 }
 
 function obterDataEHoraFormatada() {
