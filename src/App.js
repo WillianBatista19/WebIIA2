@@ -5,6 +5,7 @@ import GerarRelatorio from './components/GerarRelatorio';
 import ConsultarPlaca from './components/ConsultarPlaca';
 import Login from './components/Login';
 import Cadastro from './components/Cadastro';
+import Temp from './components/Temp';
 
 function NavigationMenu() {
   return (
@@ -32,7 +33,8 @@ function NavigationMenu() {
 
 function App() {
   return (
-    <Router>
+    <div>
+      <Router>
       <NavigationMenu />
       <Routes>
         <Route path="/cadastroPlacas" element={<CadastroPlacas />} />
@@ -41,7 +43,10 @@ function App() {
         <Route path="/Login" element={<Login />} />
         <Route path="/Cadastro" element={<Cadastro />} />
       </Routes>
-    </Router>
+      </Router>
+      <Temp/>
+    </div>
+    
   );
 }
 
